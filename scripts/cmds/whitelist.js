@@ -1,21 +1,20 @@
 const { config } = global.GoatBot;
 module.exports = {
 	config: {
-		name: "whitelist",
-		aliases:["wl"],
+		name: "wl",
 		version: "1.0",
-		author: "NTKhang",
+		author: "Amit Max ⚡",
 		countDown: 5,
 		role: 2,
 		longDescription: {
 			en: "Add, remove, edit whiteListIds"
 		},
-		category: "owner",
+		category: "𝗔𝗗𝗠𝗜𝗡",
 		guide: {
-			en: '   {pn} [add | -a] <uid | @tag>: Add admin role for user'
-				+ '\n   {pn} [remove | -r] <uid | @tag>: Remove admin role of user'
-				+ '\n   {pn} [list | -l]: List all admins'
-        + '\n   {pn} [ on | off ]: enable and disable whiteList mode'
+			en: '   {pn} [add | -a] <uid | @tag>: Add admin role for user'
+				+ '\n   {pn} [remove | -r] <uid | @tag>: Remove admin role of user'
+				+ '\n   {pn} [list | -l]: List all admins'
+        + '\n   {pn} [ on | off ]: enable and disable whiteList mode'
 		}
 	},
 
@@ -28,22 +27,13 @@ module.exports = {
 			notAdmin: "⚠ | %1 users don't have whiteListIds role:\n%2",
 			missingIdRemove: "⚠ | Please enter ID or tag user to remove whiteListIds",
 			listAdmin: "👑 | List of whiteListIds:\n%1",
-      enable: "Turned on the mode only specific whiteListIds can use bot",
-      disable: "Turned off the mode only specific whiteListIds can use bot"
+      enable: "✅ Turned on",
+      disable: "✅ Turned off"
 		}
 	},
 
 	onStart: async function ({ message, args, usersData, event, getLang, api }) {
-    const permission = global.GoatBot.config.owner;
-    if (!permission.includes(event.senderID)) {
-      api.sendMessage(
-        "Ke tumi botsho 😷❄️?",
-        event.threadID,
-        event.messageID
-      );
-      return;
-    }
-    const { writeFileSync } = require("fs-extra");
+    const { writeFileSync } = require("fs-extra");
 		switch (args[0]) {
 			case "add":
 			case "-a": {
@@ -108,18 +98,18 @@ module.exports = {
 				const getNames = await Promise.all(config.whiteListMode.whiteListIds.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
 				return message.reply(getLang("listAdmin", getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")));
 			}
-        case "on": {              
-   config.whiteListMode.enable = true;
-                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
-                return message.reply(getLang("enable"))
-            }
-            case "off": {
-   config.whiteListMode.enable = false;
-                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
-                return message.reply(getLang("disable"))
-            }
-            default:
-                return message.SyntaxError();
-        }
-    }
+        case "on": {              
+   config.whiteListMode.enable = true;
+                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+                return message.reply(getLang("enable"))
+            }
+            case "off": {
+   config.whiteListMode.enable = false;
+                writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+                return message.reply(getLang("disable"))
+            }
+            default:
+                return message.SyntaxError();
+        }
+    }
 };
